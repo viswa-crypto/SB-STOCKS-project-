@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Base palette (dark mode, mint/green accent) — RGB triplets for Tailwind's alpha-value syntax */
+  --color-ink: 7 11 20;
+  --color-panel: 13 20 32;
+  --color-panel2: 17 26 43;
+  --color-line: 30 42 63;
+  --color-ice: 231 236 245;
+  --color-mute: 133 146 171;
+  --color-mint: 47 230 166;
+  --color-mint2: 23 201 140;
+  --color-amber: 245 166 35;
+  --color-rose: 255 92 122;
+  --color-gold: 217 178 92;
+
+  --font-scale: 1;
+}
+
+/* --- Accent color themes (independent of light/dark mode) --- */
+[data-accent="blue"] {
+  --color-mint: 59 130 246;
+  --color-mint2: 37 99 235;
+}
+[data-accent="purple"] {
+  --color-mint: 168 85 247;
+  --color-mint2: 139 61 216;
+}
+
+/* --- Light mode --- */
+[data-mode="light"] {
+  --color-ink: 246 248 251;
+  --color-panel: 255 255 255;
+  --color-panel2: 255 255 255;
+  --color-line: 224 229 237;
+  --color-ice: 17 24 39;
+  --color-mute: 100 112 133;
+}
+
+/* --- High contrast accessibility mode --- */
+[data-contrast="high"] {
+  --color-line: 133 146 171;
+}
+[data-contrast="high"][data-mode="light"] {
+  --color-mute: 55 65 81;
+  --color-ice: 0 0 0;
+}
+[data-contrast="high"]:not([data-mode="light"]) {
+  --color-mute: 200 210 225;
+  --color-ice: 255 255 255;
+}
+
+html {
+  font-size: calc(16px * var(--font-scale));
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--color-line)) rgb(var(--color-panel));
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: rgb(var(--color-panel)); }
+*::-webkit-scrollbar-thumb { background: rgb(var(--color-line)); border-radius: 4px; }
+
+html { scroll-behavior: smooth; }
+
+/* Keyboard navigation: always show a clear focus ring, regardless of the
+   active theme, so tab-users never lose track of focus on custom controls. */
+:focus-visible {
+  outline: 2px solid rgb(var(--color-mint));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+body {
+  background-color: rgb(var(--color-ink));
+  color: rgb(var(--color-ice));
+  background-image:
+    radial-gradient(circle at 15% 0%, rgb(var(--color-mint) / 0.06), transparent 40%),
+    radial-gradient(circle at 85% 20%, rgb(var(--color-gold) / 0.05), transparent 40%);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.glass {
+  background: rgb(var(--color-panel2) / 0.6);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgb(var(--color-line));
+}
+
+.mono-num { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+
+.btn-primary {
+  @apply relative inline-flex items-center justify-center gap-2 rounded-lg bg-mint text-ink font-display font-semibold px-5 py-2.5 transition-all duration-200 active:scale-95 hover:shadow-glow hover:-translate-y-0.5;
+}
+.btn-ghost {
+  @apply relative inline-flex items-center justify-center gap-2 rounded-lg border border-line text-ice font-display font-medium px-5 py-2.5 transition-all duration-200 hover:border-mint/60 hover:text-mint active:scale-95;
+}
+.btn-danger {
+  @apply relative inline-flex items-center justify-center gap-2 rounded-lg bg-rose/90 text-ink font-display font-semibold px-5 py-2.5 transition-all duration-200 active:scale-95 hover:brightness-110;
+}
+
+.card {
+  @apply glass rounded-2xl p-5 shadow-card;
+}
+
+.hero-scan {
+  background: linear-gradient(90deg, transparent, rgb(var(--color-mint) / 0.08), transparent);
+  animation: heroScan 5s ease-in-out infinite;
+}
+@keyframes heroScan {
+  0% { transform: translateX(-10rem); }
+  50% { transform: translateX(38rem); }
+  100% { transform: translateX(-10rem); }
+}
+
+.hero-ping {
+  transform-origin: center;
+  animation: heroPing 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes heroPing {
+  0% { transform: scale(1); opacity: 0.8; }
+  75%, 100% { transform: scale(2.6); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
